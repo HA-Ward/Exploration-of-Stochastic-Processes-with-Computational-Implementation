@@ -1,0 +1,65 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{graphicx}   % for importing graphics files 
+\usepackage{amsmath}    % for extra maths commands
+\usepackage{amsfonts}
+\usepackage{color}      % allows for colour 
+
+% this fixes the margins. Don't change these settings.
+\usepackage[left=2.5cm,right=2cm,top=1.5cm,bottom=2cm]{geometry}
+
+% to ensure accessibility this command changes the font to make it sans serif. 
+\renewcommand{\familydefault}{\sfdefault}
+
+% you can define your own commands (or shortcuts). Here are two examples: 
+\newcommand{\infint}{\int_{-\infty}^{\infty}}
+\newcommand{\pdev}[2]{ \frac{\partial {#1}}{\partial {#2}} } 
+
+\title{Exploration of Stochastic Processes with
+Applications to Financial Risk}   % edit accordingly
+\author{Harry Ward}  % enter your name and SID
+\date{}                             % not needed, intentionally left blank
+%========================
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\section{Random Walks}
+\subsection{Mathematical Definition}
+A random walk is simply a path created by a series of random steps. In 2 dimensions, we would define a random walk process to go up by $1$ with a probability of $p$ and down by $1$ with a probability of $q$. This can be written formally as, \[ X_{n+1} =\begin{cases} X_n+1 & p,\\X_n-1 & q.\end{cases}
+\]
+Or alternatively, \[ X_n = X_0 + \sum^n_{i=1}Z_i, \hspace{4mm} \text{with} \hspace{4mm} \mathbb{P}(Z_i = 1)=p \hspace{2mm} \text{and} \hspace{2mm} \mathbb{P}(Z_i=-1) = q\].
+
+\subsection{Theoretical Properties}
+The expectation of a random walk is defined as \[E[X_n] = X_0+n(p-q).\]
+This can be proved using the second definition for a random walk by taking the expectation of $X_n$ \[E[X_n] = E[X_0] +E\Bigg[\sum^n_{i=1}Z_i\Bigg] \Rightarrow E[X_n] = X_0 + \sum^n_{i=1}E[Z_i]\]
+and since $\mathbb{P}(Z_i = 1)=p \hspace{2mm} \text{and} \hspace{2mm} \mathbb{P}(Z_i=-1) = q$ we have, \[E[Z_i] = p- q\]
+giving \[E[X_n] = X_0 + \sum^n_{i=1}(p - q) = X_0 + n(p-q).\]
+
+
+
+
+\noindent\\The variance of a random walk is defined as \[Var[X_n] = 4npq.\]
+Since $Var[X_0]=0$, This can be simply proved by taking the variance of $X_n$ \[Var[X_n] = Var[X_0] + \sum^n_{i=1}Var[Z_i] = nVar[Z_1]\]
+and with $E[Z_1^2]= p+q$
+\begin{align}
+Var[Z_1] &= E[Z_1^2]-E[Z_1]^2,\\
+&= (p+q)-(p-q)^2,\\
+&= (p+q) - (p^2-2pq-q^2),\\
+&= p(1-p) + q(1-q) + 2pq,\\
+&= pq + pq + 2pq=4pq,\\
+Var[X_n] &= nVar[Z_1] = 4npq.
+\end{align}
+
+\subsection{Computational Implementation}
+The random walks were simulated by generating independent Bernoulli trials at each step, with a probability $p$ of going up by 1 and $1-p$ going down by 1. The results from these Bernoulli trials were cumulatively summed to create the path. The simulation can be repeated for a lage number of independent paths allowing for us to estimate quantities for expectation and variance and see how they compare with the theoretical results.
+
+\subsection{Numerical Experiments}
+
+
+\end{document}
