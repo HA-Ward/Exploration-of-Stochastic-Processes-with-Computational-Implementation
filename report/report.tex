@@ -1,6 +1,7 @@
 \documentclass[11pt,a4paper]{article}
 
 \usepackage{graphicx}   % for importing graphics files 
+\usepackage{subfigure}
 \usepackage{amsmath}    % for extra maths commands
 \usepackage{amsfonts}
 \usepackage{color}      % allows for colour 
@@ -31,9 +32,12 @@ Applications to Financial Risk}   % edit accordingly
 
 \section{Random Walks}
 \subsection{Mathematical Definition}
-A random walk is simply a path created by a series of random steps. In 2 dimensions, we would define a random walk process to go up by $1$ with a probability of $p$ and down by $1$ with a probability of $q$. This can be written formally as, \[ X_{n+1} =\begin{cases} X_n+1 & p,\\X_n-1 & q.\end{cases}
+A random walk is simply a path created by a series of random steps. We would define a  1 dimensional random walk process to go up by $1$ with a probability of $p$ and down by $1$ with a probability of $q$. This can be written formally as, \[ X_{n+1} = \begin{cases} X_n+1 &\text{with probability} \hspace{2mm}p,\\X_n-1 &\text{with probability} \hspace{2mm}q.\end{cases}
 \]
-Or alternatively, \[ X_n = X_0 + \sum^n_{i=1}Z_i, \hspace{4mm} \text{with} \hspace{4mm} \mathbb{P}(Z_i = 1)=p \hspace{2mm} \text{and} \hspace{2mm} \mathbb{P}(Z_i=-1) = q\].
+Or alternatively, \[ X_n = X_0 + \sum^n_{i=1}Z_i, \hspace{4mm} \text{where} \hspace{4mm} Z_i = \begin{cases}
+    1  &\text{with probability} \hspace{2mm}p,\\
+    -1  &\text{with probability}\hspace{2mm} q.
+\end{cases}\].
 
 \subsection{Theoretical Properties}
 The expectation of a random walk is defined as \[E[X_n] = X_0+n(p-q).\]
@@ -60,6 +64,63 @@ Var[X_n] &= nVar[Z_1] = 4npq.
 The random walks were simulated by generating independent Bernoulli trials at each step, with a probability $p$ of going up by 1 and $1-p$ going down by 1. The results from these Bernoulli trials were cumulatively summed to create the path. The simulation can be repeated for a lage number of independent paths allowing for us to estimate quantities for expectation and variance and see how they compare with the theoretical results.
 
 \subsection{Numerical Experiments}
+Figure~(\ref{fig:simple symetric}) gives a visual realization to a random walk with probability $p=0.5$ over 300 steps. Although each increment is restricted to $\pm1$ we observe a lot of variation over time. 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/Simple Random Symetric Walk.png}
+    \caption{Figure showing a singular simple random symmetric walk}
+    \label{fig:simple symetric}
+\end{figure}
+
+Now lets look at many simulations with probability $p =0.6$ over 300 steps, to test the empirical values for expectation and variance and observe the distribution of final positions produced by simulating multiple many paths.
+
+From the histograms in Figure~(\ref{fig:walk many sims}) we can see that as $n$ increases the distribution of final positions approaches a normal distribution.
+Table~(\ref{tab:walk simulations}) shows the means and variances of each simulation size $n$.
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c|cccc}
+\multicolumn{1}{l|}{\textbf{Simulations}} & \multicolumn{1}{l}{\textbf{Mean}} & \multicolumn{1}{l}{\textbf{Mean Error}} & \multicolumn{1}{l}{\textbf{Variance}} & \multicolumn{1}{l}{\textbf{Variance Error}} \\ \hline
+20                                        & 61.8                              & 1.8                                     & 370.76                                & 82.76                                       \\
+100                                       & 62.4                              & 2.4                                     & 271.66                                & 16.34                                       \\
+10000                                     & 60.1                              & 0.1                                     & 287.30                                & 0.7                                        
+\end{tabular}
+\caption{Table showing estimated mean and variance of final position for $n$ simulations}
+\label{tab:walk simulations}
+\end{table}
+
+Using the equations for variance and expectation we obtain theoretical values: \begin{align*}
+    E[X_{300}] &= 0+ 300\times(0.6-0.4)=60\\
+    Var[X_{300}] &= 4\times 300 \times 0.6 \times 0.4 = 288
+\end{align*}
+We can see that as $n$ increases the estimated values for expectation and variance become more accurate, interestingly our estimations for expectation were all pretty close to the theoretical value even with small $n$ whilst the estimated variance was a lot less accurate. This is because the mean is estimated by averaging outcomes directly whereas variance is estimated by averaging the squared deviation from the mean. Squaring amplifies the influence of any walk that travels far from the mean and explains why for our $n=20$ simulation the estimated variance is much larger than the theoretical since it contained a relatively extreme final positions.
+
+\begin{figure}
+        \begin{minipage}{.5\textwidth}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/walk n =20 .png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/walk n =100.png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/walk n = 10000.png}}
+        \end{minipage}
+        \begin{minipage}{.5\textwidth}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/hist n = 20.png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/hist n = 100.png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/hist n = 10000.png}}
+        \end{minipage}
+        \caption{Simulation of many walks including histograms of final positions}
+        \label{fig:walk many sims}
+    \end{figure}
+
+\newpage
+\section{Gamblers Ruin}
+\subsection{Problem Formulation}
+Player A is playing against Player B, Player A starts with £$a$ and Player B starts with £$b$ where $m = a+b$ is the total amount of money. At each step in the game each player bets £$1$ where Player A wins £$1$ with probability $p$ and loses with probability $q$. There game continues until either player goes bankrupt. We can represent this a stochastic process \[X_{n+1} = \begin{cases}
+    X_n + 1 &\text{with probabilty }p \text{ if } 1\leq X_n \leq m-1,\\
+    X_n -1 &\text{with probability }q \text{ if } 1\leq X_n \leq m-1,\\
+    0 &\text{if }X_n = 0,\\
+    m &\text{if }X_n = m.
+\end{cases}\] This is the same as a random walk but with absorbing barriers at $X_n=0$ and $X_n = m$.
+
 
 
 \end{document}
