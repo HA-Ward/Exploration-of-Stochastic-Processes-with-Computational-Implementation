@@ -1,16 +1,28 @@
 import numpy as np
 
-def gamblers_ruin(start, p, m):
-    q = 1-p
-    boundaryReached = False
+def gamblers_ruin(start, p, m, batch_size=1000):
+    q = 1 - p
     step_set = np.array([-1, 1])
-    probs = np.array([q,p])
-    random_walk = [start]
-    while not boundaryReached:
-        random_step = np.random.choice(step_set, p=probs)
-        random_walk = np.append(random_walk, random_walk[-1] + random_step)
-        if random_walk[-1] == 0 or random_walk[-1] == m:
-            boundaryReached = True
+    probs = np.array([q, p])
+
+    position = start
+    walk_chunks = [np.array([start])]
+
+    while True:
+        steps = np.random.choice(step_set, size=batch_size, p=probs)
+        path = position + np.cumsum(steps)
+
+        hit = np.where((path == 0) | (path == m))[0]
+
+        if hit.size > 0:
+            first_hit = hit[0]
+            walk_chunks.append(path[:first_hit + 1])
+            break
+        else:
+            walk_chunks.append(path)
+            position = path[-1]
+
+    random_walk = np.concatenate(walk_chunks)
     return random_walk, random_walk[-1], len(random_walk) - 1
 
 def simulate_gamblers_ruin(n_paths, start, p, m):
@@ -23,4 +35,11 @@ def simulate_gamblers_ruin(n_paths, start, p, m):
         final_positions.append(finalp)
         steps_taken.append(steps)
     return paths, final_positions, steps_taken
+
+def run_for_n(args):
+    n, start, p, m = args
+    final_positions = simulate_gamblers_ruin(n, start, p, m)[1]
+    ratio = np.sum(np.array(final_positions) == 0) / n
+    return ratio
+
 
