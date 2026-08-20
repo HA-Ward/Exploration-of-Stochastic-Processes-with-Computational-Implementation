@@ -67,7 +67,7 @@ The random walks were simulated by generating independent Bernoulli trials at ea
 Figure~(\ref{fig:simple symetric}) gives a visual realization to a random walk with probability $p=0.5$ over 300 steps. Although each increment is restricted to $\pm1$ we observe a lot of variation over time. 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/Simple Random Symetric Walk.png}
+    \includegraphics[width=0.5\linewidth]{figures/Random Walk/Simple Random Symetric Walk.png}
     \caption{Figure showing a singular simple random symmetric walk}
     \label{fig:simple symetric}
 \end{figure}
@@ -98,14 +98,14 @@ We can see that as $n$ increases the estimated values for expectation and varian
 
 \begin{figure}
         \begin{minipage}{.5\textwidth}
-        \subfigure{\includegraphics[width=1\linewidth]{figures/walk n =20 .png}}
-        \subfigure{\includegraphics[width=1\linewidth]{figures/walk n =100.png}}
-        \subfigure{\includegraphics[width=1\linewidth]{figures/walk n = 10000.png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/Random Walk/walk n =20 .png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/Random Walk/walk n =100.png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/Random Walk/walk n = 10000.png}}
         \end{minipage}
         \begin{minipage}{.5\textwidth}
-        \subfigure{\includegraphics[width=1\linewidth]{figures/hist n = 20.png}}
-        \subfigure{\includegraphics[width=1\linewidth]{figures/hist n = 100.png}}
-        \subfigure{\includegraphics[width=1\linewidth]{figures/hist n =10000.png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/Random Walk/hist n = 20.png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/Random Walk/hist n = 100.png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/Random Walk/hist n =10000.png}}
         \end{minipage}
         \caption{Simulation of many walks including histograms of final positions}
         \label{fig:walk many sims}
@@ -121,7 +121,7 @@ Player A is playing against Player B, Player A starts with £$a$ and Player B st
     m &\text{if }X_n = m.
 \end{cases}\] This is the same as a random walk but with absorbing barriers at $X_n=0$ and $X_n = m$.
 \subsection{Analytical Solution}
-First lets solve for the probability of ruin, that is player A goes bankrupt. We can write 
+First lets solve for the probability of ruin, that is the probability of player A going bankrupt. We can write 
 \begin{align*}
 \mathbb{P}(\text{Ruin}) &= \mathbb{P}(\text{win first round})\mathbb{P}(\text{Ruin} \mid \text{win first round}) + \mathbb{P}(\text{lose first round})\mathbb{P}(\text{Ruin} \mid \text{lose first round})\\
 &=p\mathbb{P}(\text{Ruin} \mid \text{win first round}) + q\mathbb{P}(\text{Ruin} \mid \text{lose first round})
