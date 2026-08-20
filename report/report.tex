@@ -210,4 +210,30 @@ Whilst having the equation to work out theoretical expected duration is handy es
 \end{figure}
 
 The simulated paths appear to reinforce our method for calculating the exact PMF, this result is quite important as we can now find exact probabilities using this distribution instead of using just expected duration or probabilities from the simulated distribution. For example lets say we want to find the number of steps it would take for us to be $95\%$ confident that the game has finished we can use a search in python to find that it would take $1521$.
+
+\noindent
+Experimenting with values for $a$, $m$ and $p$ I was able create the PMF in Figure~(\ref{fig:pmf a = 10, m = 150}). This process is quite interesting as there is a relatively high probability of the game finishing early on as the start position of $10$ is very close to $0$, however because of the probability $p=0.525$ there is a drift that means the theoretical probability of ruin is only $0.448$. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures//Gamblers_ruin/pmf a = 10 m = 150.png}
+    \caption{PMF showing the flaw in solely using expected duration}
+    \label{fig:pmf a = 10, m = 150}
+\end{figure}
+The main flaw I wanted to point out was that the expected duration is actually at one of the least probable spots and although the average total steps would certainly match the expected duration there is only a $3\%$ chance a game would finish in the range $[500,1000]$ whilst there is a $33\%$ chance finishing before and $64\%$ chance finishing after.
+
+\subsection{How Probability of Ruin Changes With Start Position $a$ and Probability $p$}
+From the last few simulations or just thinking logically you can probably tell that the closer the starting position $a$ is to $0$ and the smaller the value of $p$ the higher the probability of ruin. 
+
+\begin{figure}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width = 1\linewidth]{}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+        
+    \end{minipage}
+    \caption{Caption}
+    \label{fig:placeholder}
+\end{figure}
+
 \end{document}
