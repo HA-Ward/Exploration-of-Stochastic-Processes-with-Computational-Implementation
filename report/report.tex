@@ -189,4 +189,25 @@ This can be explained since we can treat each path as an independent Bernoulli t
 On the figure in the right I included a plot of standard error since it gives the theoretical scale of which the error should fluctuate around.
 
 \subsection{Theory vs Simulation}
+We have looked at how probability of ruin can be calculated and simulated, now lets look at solving duration. Using the same variables $m=50$, $p=0.51$ and $a=20$ as last time we can calculate the expected duration \[d_{20} = \frac{1}{0.49-0.51}(20-50\times\frac{1-\frac{49}{51}^{20}}{1-\frac{49}{51}^{50}})=592.2.\]
+
+Now we can calculate the mean duration from simulating $100,000$ paths, Figure~(\ref{fig:hist gruin}) shows the mean duration and compares it with the theoretical expected duration. More importantly it shows the shape of its distribution.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures//Gamblers_ruin/hist steps gruin.png}
+    \caption{Histogram of total steps}
+    \label{fig:hist gruin}
+\end{figure}
+
+Whilst having the equation to work out theoretical expected duration is handy especially as it matches the simulated value, in practice it would be much better to have the distribution associated with duration. That being said this distribution doesn't follow any standard binomial, poisson, normal or gamma distributions. Instead we can use python to track the probability of being at each position over time, splitting each step by $p$ and $q$ until it records how much land on $0$ and $m$ at each step. This gives the exact PMF for duration of the game shown in Figure~(\ref{fig:sim vs exact}).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{figures//Gamblers_ruin/sim dist vs pmf.png}
+    \caption{Simulated distribution vs probabilty mass function}
+    \label{fig:sim vs exact}
+\end{figure}
+
+The simulated paths appear to reinforce our method for calculating the exact PMF, this result is quite important as we can now find exact probabilities using this distribution instead of using just expected duration or probabilities from the simulated distribution. For example lets say we want to find the number of steps it would take for us to be $95\%$ confident that the game has finished we can use a search in python to find that it would take $1521$.
 \end{document}
