@@ -42,4 +42,22 @@ def run_for_n(args):
     ratio = np.sum(np.array(final_positions) == 0) / n
     return ratio
 
+def exact_duration_pmf(a, m, p, n_max):
+    q = 1 - p
+    probs = np.zeros(m+1)      # probability of being at each position
+    probs[a] = 1.0
+    pmf = np.zeros(n_max)      # P(absorbed at exactly step n)
+
+    for n in range(1, n_max+1):
+        new_probs = np.zeros(m+1)
+        for i in range(1, m):          # only transient states move
+            new_probs[i+1] += probs[i]*p
+            new_probs[i-1] += probs[i]*q
+        # mass that just landed on 0 or m this step = newly absorbed
+        pmf[n-1] = new_probs[0] + new_probs[m]
+        new_probs[0] = 0     # remove absorbed mass so it doesn't move again
+        new_probs[m] = 0
+        probs = new_probs
+
+    return pmf
 
