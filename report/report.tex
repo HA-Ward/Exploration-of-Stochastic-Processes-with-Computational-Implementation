@@ -223,17 +223,21 @@ Experimenting with values for $a$, $m$ and $p$ I was able create the PMF in Figu
 The main flaw I wanted to point out was that the expected duration is actually at one of the least probable spots and although the average total steps would certainly match the expected duration there is only a $3\%$ chance a game would finish in the range $[500,1000]$ whilst there is a $33\%$ chance finishing before and $64\%$ chance finishing after.
 
 \subsection{How Probability of Ruin Changes With Start Position $a$ and Probability $p$}
-From the last few simulations or just thinking logically you can probably tell that the closer the starting position $a$ is to $0$ and the smaller the value of $p$ the higher the probability of ruin. 
+From the last few simulations or just thinking logically you can probably tell that the closer the starting position $a$ is to $0$ and the smaller the value of $p$ the higher the probability of ruin. Figure~(\ref{fig:p ruin against p and a}) shows that the computed ratios fit the probability of ruin for both change in start position and probability. The left plot shows a decrease in probability with increase in start position with a curved increasing gradient. From the equation for probability of ruin we can see that the equation of this curve is \[r_a=1.156\times\frac{49}{51}^a-0.156.\]
+This equation describes an exponential decay, which explains the shape of the plot. If we were to change $p$ to be greater than $0.5$ then with $\rho>1$ we would expect the opposite, a decreasing concave exponential decay.
+
+Now focusing on the equation on the right it looks like an inverted tanh curve or s shape. In this case looking at the equation wont really tell us anything. 
+
 
 \begin{figure}
     \begin{minipage}{.5\textwidth}
         \includegraphics[width = 1\linewidth]{figures/Gamblers_ruin/pruin against start.png}
     \end{minipage}
     \begin{minipage}{.5\textwidth}
-        
+        \includegraphics[width = 1\linewidth]{figures/Gamblers_ruin/pruin against pwin.png}
     \end{minipage}
-    \caption{Caption}
-    \label{fig:placeholder}
+    \caption{Probability of ruin against start position and probability of win}
+    \label{fig:p ruin against p and a}
 \end{figure}
 
 \end{document}
