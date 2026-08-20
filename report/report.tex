@@ -150,4 +150,43 @@ and solving this inhomogeneous difference equation we obtain
 \end{cases}
 \]
 
+\subsection{Simulating Varying Numbers of Paths to Test Convergence}
+
+Figure~(\ref{fig:Gamblers ruin}) shows random walks simulated with probability $p = 0.5$ of a win at each step and a starting point at $a = 20$. This simulation has player B also start with £$20$ so $m =40$, therefore the problem has 2 absorbing boundaries at $0$ and $40$ both at equal distance from the origin.
+\newpage
+\begin{figure}[h!]
+        \begin{minipage}{.5\textwidth}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/Gamblers_ruin/gruin n = 3.png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/Gamblers_ruin/gruin n = 30.png}}
+        \end{minipage}
+        \begin{minipage}{.5\textwidth}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/Gamblers_ruin/gruin n = 10.png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/Gamblers_ruin/gruin n = 100.png}}
+        \end{minipage}
+        \caption{Simulation of gamblers ruin problem with varying numbers of paths}
+        \label{fig:Gamblers ruin}
+    \end{figure}
+
+Without calculating the probability of ruin we can clearly see that the probability should be $0.50$, and from this figure we can see that as n increases the ratio of paths that are ruined become closer to the theoretical probability.
+
+We will investigate this further by looking at how this ratio of ruin converges as n increases, however using $m = 50$ and $p=0.51$ and keeping $a=20$. This time the theoretical probability isn't obvious so we will have we will have to solve the probability of ruin using the equation stated in the last section. with $\rho = 49/51$ we have \[r_{20} =\frac{\frac{49}{51}^{20} - \frac{49}{51}^{50}}{1-\frac{49}{51}^{50}} = 0.3631.\]
+
+\begin{figure}[h]
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=1\linewidth]{figures/Gamblers_ruin/ratio change with n.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=1\linewidth]{figures/Gamblers_ruin/ratio associated error.png}
+    \end{minipage}
+    \caption{Simulating error with change in number of paths}
+    \label{fig:sim error}
+\end{figure}
+
+Figure~(\ref{fig:sim error}) includes 2 plots, the plot on the left shows how the ratio of paths that become ruined change with increase n and the figure on the right shows absolute error. At first this result might not be what you expected as after the first few thousand number of paths we don't really observe a convergence, instead it seems to look like a white noise process.
+
+This can be explained since we can treat each path as an independent Bernoulli trial (ruined, not ruined), with variance $p(1-p)$. Since our simulated ratio $\hat{p}$ is the average of $n$ trials its variance is $p(1-p)/n$ and therefore the standard error is $SE[\hat{p}] = \sqrt{p(1-p)/n}$. The standard error is proportional to $1/\sqrt{n}$ this is why from $n =2000$ to $n = 10000$ a $\times5$ increase in $n$ we only observe a $1/\sqrt{5} \approx2.2$ shrinkage in error.
+
+On the figure in the right I included a plot of standard error since it gives the theoretical scale of which the error should fluctuate around.
+
+\subsection{Theory vs Simulation}
 \end{document}
