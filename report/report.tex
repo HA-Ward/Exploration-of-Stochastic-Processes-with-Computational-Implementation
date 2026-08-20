@@ -51,14 +51,14 @@ giving \[E[X_n] = X_0 + \sum^n_{i=1}(p - q) = X_0 + n(p-q).\]
 \noindent\\The variance of a random walk is defined as \[Var[X_n] = 4npq.\]
 Since $Var[X_0]=0$, This can be simply proved by taking the variance of $X_n$ \[Var[X_n] = Var[X_0] + \sum^n_{i=1}Var[Z_i] = nVar[Z_1]\]
 and with $E[Z_1^2]= p+q$
-\begin{align}
+\begin{align*}
 Var[Z_1] &= E[Z_1^2]-E[Z_1]^2,\\
 &= (p+q)-(p-q)^2,\\
 &= (p+q) - (p^2-2pq-q^2),\\
 &= p(1-p) + q(1-q) + 2pq,\\
 &= pq + pq + 2pq=4pq,\\
 Var[X_n] &= nVar[Z_1] = 4npq.
-\end{align}
+\end{align*}
 
 \subsection{Computational Implementation}
 The random walks were simulated by generating independent Bernoulli trials at each step, with a probability $p$ of going up by 1 and $1-p$ going down by 1. The results from these Bernoulli trials were cumulatively summed to create the path. The simulation can be repeated for a lage number of independent paths allowing for us to estimate quantities for expectation and variance and see how they compare with the theoretical results.
@@ -105,7 +105,7 @@ We can see that as $n$ increases the estimated values for expectation and varian
         \begin{minipage}{.5\textwidth}
         \subfigure{\includegraphics[width=1\linewidth]{figures/hist n = 20.png}}
         \subfigure{\includegraphics[width=1\linewidth]{figures/hist n = 100.png}}
-        \subfigure{\includegraphics[width=1\linewidth]{figures/hist n = 10000.png}}
+        \subfigure{\includegraphics[width=1\linewidth]{figures/hist n =10000.png}}
         \end{minipage}
         \caption{Simulation of many walks including histograms of final positions}
         \label{fig:walk many sims}
@@ -120,7 +120,34 @@ Player A is playing against Player B, Player A starts with £$a$ and Player B st
     0 &\text{if }X_n = 0,\\
     m &\text{if }X_n = m.
 \end{cases}\] This is the same as a random walk but with absorbing barriers at $X_n=0$ and $X_n = m$.
+\subsection{Analytical Solution}
+First lets solve for the probability of ruin, that is player A goes bankrupt. We can write 
+\begin{align*}
+\mathbb{P}(\text{Ruin}) &= \mathbb{P}(\text{win first round})\mathbb{P}(\text{Ruin} \mid \text{win first round}) + \mathbb{P}(\text{lose first round})\mathbb{P}(\text{Ruin} \mid \text{lose first round})\\
+&=p\mathbb{P}(\text{Ruin} \mid \text{win first round}) + q\mathbb{P}(\text{Ruin} \mid \text{lose first round})
+\end{align*}
+\noindent
+From the property of Markov processes we know that $\mathbb{P}(\text{Ruin} \mid \text{lose first round})$ and $\mathbb{P}(\text{Ruin} \mid \text{win first round})$ are the same as $\mathbb{P}(\text{Ruin})$ just with $\pm1$ starting points, allowing us to write probability or ruin as \[r_i = pr_{i+1} + qr_{i-1}.\]
+giving the linear difference, \[pr_{i+1}-r_i+qr_{i-1}=0 \qquad \text{subject to} \qquad r_0=1,\, r_m=0. \]
+\noindent
+by solving the difference equation with $a$ as the start point and $\rho = q/p$, the solution for the probability of ruin is \[ r_a = \begin{cases}
+    \frac{\rho^a - \rho^m}{1-\rho^m} &\text{if }\rho \ne 1,\\
+    1-\frac{a}{m} &\text{if }\rho = 1.
+\end{cases}\]
 
+similarly we can solve for expected duration of game, \begin{align*}
+    E[\text{duration}] &= \mathbb{P}(\text{win first round})E[\text{duration} \mid \text{win first round}] + \mathbb{P}(\text{lose first round})E[\text{duration} \mid \text{lose first round}]\\
+    &= pE[\text{duration} \mid \text{win first round}] + qE[\text{duration} \mid \text{lose first round}]\\
+    d_i &= p(1+d_{i+1}) + q(1+d_{i-1})
+\end{align*}
+\noindent
+The important difference is that $E[\text{duration} \mid \text{win first round}] = 1+d_{i+1}$ because the round itself takes $1$ time step. Again we can rearrange to form the difference equation \[pd_{i+1} - d_i +qd_{i-1} = -1 \quad \text{subject to} \quad d_0=0, \, d_m = 0.\]
 
+and solving this inhomogeneous difference equation we obtain 
+\[d_a = \begin{cases}
+    \frac{1}{q-p}(a-m \frac{1 - \rho^a}{1-\rho^m}) &\text{if } \rho \ne 1,\\
+    a(m-a) &\text{if } \rho = 1.
+\end{cases}
+\]
 
 \end{document}
