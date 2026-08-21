@@ -72,7 +72,7 @@ Figure~(\ref{fig:simple symetric}) gives a visual realization to a random walk w
     \label{fig:simple symetric}
 \end{figure}
 
-Now lets look at many simulations with probability $p =0.6$ over 300 steps, to test the empirical values for expectation and variance and observe the distribution of final positions produced by simulating multiple many paths.
+We next investigate many simulations with probability $p =0.6$ over 300 steps, to test the empirical values for expectation and variance and observe the distribution of final positions produced by simulating multiple many paths.
 
 From the histograms in Figure~(\ref{fig:walk many sims}) we can see that as $n$ increases the distribution of final positions approaches a normal distribution.
 Table~(\ref{tab:walk simulations}) shows the means and variances of each simulation size $n$.
@@ -189,7 +189,7 @@ This can be explained since we can treat each path as an independent Bernoulli t
 On the figure in the right I included a plot of standard error since it gives the theoretical scale of which the error should fluctuate around.
 
 \subsection{Theory vs Simulation}
-We have looked at how probability of ruin can be calculated and simulated, now lets look at solving duration. Using the same variables $m=50$, $p=0.51$ and $a=20$ as last time we can calculate the expected duration \[d_{20} = \frac{1}{0.49-0.51}(20-50\times\frac{1-\frac{49}{51}^{20}}{1-\frac{49}{51}^{50}})=592.2.\]
+We have looked at how probability of ruin can be calculated and simulated, lets next investigate solving duration. Using the same variables $m=50$, $p=0.51$ and $a=20$ as last time we can calculate the expected duration \[d_{20} = \frac{1}{0.49-0.51}(20-50\times\frac{1-\frac{49}{51}^{20}}{1-\frac{49}{51}^{50}})=592.2.\]
 
 Now we can calculate the mean duration from simulating $100,000$ paths, Figure~(\ref{fig:hist gruin}) shows the mean duration and compares it with the theoretical expected duration. More importantly it shows the shape of its distribution.
 
@@ -220,16 +220,16 @@ Experimenting with values for $a$, $m$ and $p$ I was able create the PMF in Figu
     \caption{PMF showing the flaw in solely using expected duration}
     \label{fig:pmf a = 10, m = 150}
 \end{figure}
-The main flaw I wanted to point out was that the expected duration is actually at one of the least probable spots and although the average total steps would certainly match the expected duration there is only a $3\%$ chance a game would finish in the range $[500,1000]$ whilst there is a $33\%$ chance finishing before and $64\%$ chance finishing after.
+
+The main flaw I wanted to point out was that the expected duration alone provides an incomplete description of the distribution. In this example, the mean duration lies in a relatively low-probability region and although the average total steps would certainly match the expected duration there is only a $3\%$ chance a game would finish in the range $[500,1000]$ whilst there is a $33\%$ chance finishing before and $64\%$ chance finishing after. This demonstrates that the expected value does not necessarily correspond to a typical outcome, particularly for asymmetric distributions.
 
 \subsection{How Probability of Ruin Changes With Start Position $a$ and Probability $p$}
-From the last few simulations or just thinking logically you can probably tell that the closer the starting position $a$ is to $0$ and the smaller the value of $p$ the higher the probability of ruin. Figure~(\ref{fig:p ruin against p and a}) shows that the computed ratios fit the probability of ruin for both change in start position and probability. The left plot shows a decrease in probability with increase in start position with a curved increasing gradient. From the equation for probability of ruin we can see that the equation of this curve is \[r_a=1.156\times\frac{49}{51}^a-0.156.\]
-This equation describes an exponential decay, which explains the shape of the plot. If we were to change $p$ to be greater than $0.5$ then with $\rho>1$ we would expect the opposite, a decreasing concave exponential decay.
+From the last few simulations or just thinking logically it follows intuitively that the closer the starting position $a$ is to $0$ and the smaller the value of $p$ the higher the probability of ruin. Figure~(\ref{fig:p ruin against p and a}) shows that the computed ratios fit the probability of ruin for both change in start position and probability. The left plot shows a decrease in probability with increase in start position with a curved increasing gradient. From the equation for probability of ruin we can see that the equation of this curve is \[r_a=1.156\times\frac{49}{51}^a-0.156.\]
+This equation describes an exponential decay, which explains the shape of the plot. If we were to change $p$ to be less than $0.5$ then with $\rho>1$ we would expect the opposite, a decreasing concave exponential decay.
 
 Now focusing on the equation on the right it looks like an inverted tanh curve or s shape. In this case looking at the equation wont really tell us anything. 
 
-
-\begin{figure}
+\begin{figure}[h]
     \begin{minipage}{.5\textwidth}
         \includegraphics[width = 1\linewidth]{figures/Gamblers_ruin/pruin against start.png}
     \end{minipage}
@@ -239,5 +239,23 @@ Now focusing on the equation on the right it looks like an inverted tanh curve o
     \caption{Probability of ruin against start position and probability of win}
     \label{fig:p ruin against p and a}
 \end{figure}
+Instead Figure~(\ref{fig:p ruin against p and a multi}) shows us that an increase in $a$ pivots the shape of the curve. Taking another look at the left graph we can see that a change in $p$ affects the change in gradient of the curve such that curves with $p>0.5$ are symmetric with curves with $p<0.5$ about the curve of $p=0.5$ where the gradient is constant.
+
+\begin{figure}[h]
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width = 1\linewidth]{figures/Gamblers_ruin/start theory.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width = 1\linewidth]{figures/Gamblers_ruin/probability theory.png}
+    \end{minipage}
+    \caption{Probability of ruin against start position and probability of win with different variations}
+    \label{fig:p ruin against p and a multi}
+\end{figure}
+
+\subsection{Summary}
+The Gambler's Ruin problem demonstrated how analytical solutions for both absorption probabilities and expected duration can be validated computationally. The simulations reproduced the theoretical ruin probability and expected duration, while the analysis of the duration distribution demonstrated limitations of relying solely on expected values. The problem also provided an introduction to absorbing stochastic processes and motivated the use of transition probabilities considered in the following section on Markov chains.
+
+\newpage
+\section{Markov Chains}
 
 \end{document}
