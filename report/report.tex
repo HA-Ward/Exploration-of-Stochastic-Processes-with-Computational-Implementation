@@ -303,4 +303,76 @@ we now have \[\lambda P^3 = \begin{pmatrix}
     0.3232&0.2922&0.3846
 \end{pmatrix}.\]
 So if we still wanted to know the probability of ending on $1$ whilst knowing only the start distribution, we get a probability of $0.2922$.
+
+\subsection{Computational Implementation and Convergence}
+By simulating paths that follow the transition diagram in Figure~(\ref{fig:3 state td}) we can check if the probability calculated by $\lambda P^n$ is accurate to the the ratio of final positions for each state after a certain number of steps. Figure~(\ref{fig:ratio of finalp 3state}) shows a plot for the ratio of paths with a final position of $0$, $1$ and $2$ after n = 20 steps.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures//markov chains/ratio against number of paths 3 state.png}
+    \caption{Plot showing the ratio of final positions for each state with increase in number of paths n}
+    \label{fig:ratio of finalp 3state}
+\end{figure}
+
+\noindent
+With a row vector of probabilities of \[\lambda P^{20}= \begin{pmatrix}
+    0.31389876&0.29147617&0.39462507
+\end{pmatrix}\]
+we can see that as the number of paths increases the ratio of paths in each respective state converges closer to the theoretical value given by the row vector.
+
+Now lets investigate how the theoretical probability of this 3 state markov chain behaves with an increasing number of steps. Figure~(\ref{fig:theoretical probability against number of steps}) shows us that the theoretical probability fluctuates for each state until around step 10 where each state seems to converge.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures//markov chains/theoretical probability against number of steps.png}
+    \caption{Figure of theoretical probability against number of steps}
+    \label{fig:theoretical probability against number of steps}
+\end{figure}
+
+this happens because our markov chain has a stationary distribution, that is there exists a probability vector $\pi$ satisfying $\pi P = \pi$. The plot shows that no matter where we start the probability will always converge to $\pi$. 
+A chain only converges like this if it's both irreducible (no isolated pockets) and aperiodic (it doesn't cycle in a predictable pattern), together these are called being ergodic.
+
+At $n = 20$ the distribution appears to have numerically converged using the row vector calculated earlier, lets verify that it approximately satisfies $\pi P = \pi$.
+
+\begin{align*}
+    \pi P &= \begin{pmatrix}
+         0.31389876&0.29147617&0.39462507
+    \end{pmatrix}
+    \begin{pmatrix}
+    0&0.3&0.7\\
+    0.4&0&0.6\\
+    0.5&0.5&0
+\end{pmatrix}\\
+&=\begin{pmatrix}
+    0.313903&0.29148216&0.39461484
+\end{pmatrix}\approx\pi
+\end{align*}
+
+\subsection{Gamblers Ruin as a Markov Chain}
+Lets revise the gamblers ruin problem using the same values $m =50$, $p=0.51$ and $a = 20$ but instead explicitly solving using Markov chains instead of using the formulas derived by solving difference equations. We can do this using a $51\times51$ transition matrix where for every $ith$ row entry $(i,i-1)=1-p$ and $(i,i+1) = p$ apart from row $0$ and $m$ which have entries $(0,0) = 1$ and $(m,m) = 1$ respectively. Which will look like this: \[P = \begin{pmatrix}
+    1&0&0&\cdots&0&0&0\\
+    0.49&0&0.51&\cdots&0&0&0\\
+    0&0.49&0&\cdots&0&0&0\\
+    \vdots&\vdots&\vdots&\ddots&\vdots&\vdots&\vdots\\
+    0&0&0&\cdots&0&0.51&0\\
+    0&0&0&\cdots&0.49&0&0.51\\
+    0&0&0&\cdots&0&0&1
+\end{pmatrix}\]
+
+Using the transition matrix we can calculate the probability of being in any state at any step in time, which is particularly useful for finding the probability of ruin at any step you want. The left plot in Figure~(\ref{fig:cpruin and cdf duration}) was quickly computed by calculating the probability of being in the ruined state at every step until 5000. As you can see in the plot it converges at 0.3631 which is the probability of ruin calculated using the equation from the last section.
+
+\begin{figure}[h]
+    \begin{minipage}{.5\textwidth}
+    \includegraphics[width=1\linewidth]{figures//markov chains/cumulative probability.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+    \includegraphics[width=1\linewidth]{figures//markov chains/cumulative distfunc of duration.png}
+    \end{minipage}
+    \caption{Figure of cumulative probability ruin and cdf of duration}
+    \label{fig:cpruin and cdf duration}
+\end{figure}
+
+The right plot in Figure~(\ref{fig:cpruin and cdf duration}) was computed by combining the cumulative probability of ruin and the cumulative probability of winning, which are the conditions required for the game to end. Following this logic the plot acts as the cumulative distribution function for the duration of the game, whilst being a much more elegant method than what we used to calculate the PMF previously.
+\newpage
+\section{Poisson processes}
 \end{document}
+
