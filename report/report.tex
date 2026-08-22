@@ -374,5 +374,73 @@ Using the transition matrix we can calculate the probability of being in any sta
 The right plot in Figure~(\ref{fig:cpruin and cdf duration}) was computed by combining the cumulative probability of ruin and the cumulative probability of winning, which are the conditions required for the game to end. Following this logic the plot acts as the cumulative distribution function for the duration of the game, whilst being a much more elegant method than what we used to calculate the PMF previously.
 \newpage
 \section{Poisson processes}
+\subsection{Defining a Poisson Process}
+Previously we have been working on stochastic processes in discrete space $S = \mathbb{Z}$ and discrete time steps. Poisson processes still exist in a discrete space, however with continuous time. Picture a walk that can only move upwards but instead of just moving at each fixed step, their is a distribution deciding on when each step will be. This in fact is one of the ways we can define the Poisson process. More officially let $T_1,T_2,T_3,...$ be i.i.d. random variables of time between each step with $T_i \sim \text{Exponential}[\lambda]$ then \[ X(t) = \begin{cases}
+    0 &\text{for }0\leq t \leq T_1, \\
+     1 &\text{for }T_1\leq t \leq T_1 + T_2, \\
+      2 &\text{for }T_2\leq t \leq T_1 + T_2 +T_3, \\
+      \text{and so on.}
+\end{cases}\]
+\noindent
+Figure~(\ref{fig:visualization of poisson process}) shows a visualization of what this process would look like if we had a rate of $\lambda = 0.5$ and max time of $10$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures//Poisson processes/Visualization of poisson process.png}
+    \caption{Visualization of Poisson process}
+    \label{fig:visualization of poisson process}
+\end{figure}
+
+We can also define a Poisson process using Poisson increments. That is a stochastic process $X(t)$ is a Poisson process if: \begin{enumerate}
+    \item $X(0) = 0$
+    \item $X(t+s) - X(t) \sim Po(\lambda s)$ for all $s, t > 0$
+    \item $X(t_2) - X(t_1)$ and $X(t_4) - X(t_3)$ are independent for all $t_1 \leq t_2 \leq t_3 \leq t_4$
+\end{enumerate}
+
+This definition and the first definition are the exact, however using this definition we can easily work out the theoretical probability of a number of events happening in a given time. Whilst the first definition makes it easy to simulate a sample path whilst also being able to solve problems about waiting times.
+
+\subsection{Computational Verification}
+The left plot in Figure~(\ref{fig:act vs sim pmf}) was computed by generating $10,000$ paths of $\lambda = 0.5$ and max time of $10$ where each bar represents the percentage of paths that ended with the final count at that position. The plot on the right is the PMF for a Poisson distribution with $\lambda = 5$, notice that the plots are approximately the same this is due to the fact that $X(t) \sim Po(\lambda t)$. The expectation and variance of the final count was $4.975$ and  $4.896$ respectively and when we increase the number of paths to $100,000$ we get $5.012$ and $5.017$ converging closer to the theoretical value of $5$. 
+
+\begin{figure}[h]
+    \begin{minipage}{.5\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Poisson processes/sim pmf.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Poisson processes/act pmf.png}
+    \end{minipage}
+    \caption{Figure comparing calculated pmf vs actual pmf}
+    \label{fig:act vs sim pmf}
+\end{figure}
+
+Lets also test the superposition property of Poisson processes, this being that if $X(t)$ and $Y(t)$ are both independent Poisson processes with rates $\lambda$ and $\mu$ respectively then the process $Z(t)$ given by $Z(t)=X(t)+Y(t)$ is a Poisson process with rate $\lambda + \mu$. Lets pick $\lambda = 2$ and $\mu = 4$, we might expect that the that the mean and variance of generated values will converge to $6$. Figure~(\ref{fig:exp and var of realisations}) shows this result exactly.
+
+\begin{figure}[h]
+    \begin{minipage}{.5\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Poisson processes/mean of realisation.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Poisson processes/Variance of realisation.png}
+    \end{minipage}
+    \caption{Expectation and variance as number of realizations increases}
+    \label{fig:exp and var of realisations}
+\end{figure}
+
+However we can better confirm this by looking at the PMFs. Figure~(\ref{fig:pmf ztxtyt}) shows that when simulating $1,000,000$ realizations of $X(t) + Y(t)$ the difference in PMFs for theoretical $Z(t)$ and the simulated superposition become negligible. 
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}{.40\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Poisson processes/pmf xtyt.png}
+    \end{minipage}
+    \begin{minipage}{.40\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Poisson processes/pmf zt.png}
+    \end{minipage}
+    \caption{PMF for $X(t) + Y(t)$ and $Z(t)$}
+    \label{fig:pmf ztxtyt}
+\end{figure}
+
+\section{Brownian Motion}
+
 \end{document}
 
