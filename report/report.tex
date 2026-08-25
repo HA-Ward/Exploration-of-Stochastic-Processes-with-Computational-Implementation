@@ -35,7 +35,7 @@ Applications to Financial Risk}   % edit accordingly
 
 \section{Random Walks}
 \subsection{Mathematical Definition}
-A random walk is simply a path created by a series of random steps. We would define a  1 dimensional random walk process to go up by $1$ with a probability of $p$ and down by $1$ with a probability of $q$. This can be written formally as, \[ X_{n+1} = \begin{cases} X_n+1 &\text{with probability} \hspace{2mm}p,\\X_n-1 &\text{with probability} \hspace{2mm}q.\end{cases}
+A random walk is simply a path created by a series of random steps. We would define a  1 dimensional simple random walk process to go up by $1$ with a probability of $p$ and down by $1$ with a probability of $q$. This can be written formally as, \[ X_{n+1} = \begin{cases} X_n+1 &\text{with probability} \hspace{2mm}p,\\X_n-1 &\text{with probability} \hspace{2mm}q.\end{cases}
 \]
 Or alternatively, \[ X_n = X_0 + \sum^n_{i=1}Z_i, \hspace{4mm} \text{where} \hspace{4mm} Z_i = \begin{cases}
     1  &\text{with probability} \hspace{2mm}p,\\
@@ -441,6 +441,65 @@ However we can better confirm this by looking at the PMFs. Figure~(\ref{fig:pmf 
 \end{figure}
 
 \section{Brownian Motion}
+\subsection{Definitions and Properties}
+Continuing in with continuous time lets introduce Brownian motion. Brownian motion is a continuous-time and continuous state-space Markov process. A stochastic process $B(t)$ is defined as Brownian motion if it satisfies:
+\begin{enumerate}
+    \item $B(0) = 0$ and $B(t)$ is a continuous function of $t$
+    \item independent increments: for any $0 < t_1 < t_2 < t_3 <  t_4$ the increments \[B(t_2) - B(t_1)\text{ and } B(t_4) - B(t_3)\] are independent random variables.
+    \item stationary Guassian increments: for every time $t$ and time increment $\Delta t$, \[B(t+\Delta t) - B(t) \sim N(0, \sigma ^2 \Delta t)\] where $\sigma ^2 > 0$ is the diffusion coefficient
+\end{enumerate}
+
+At this stage it is also important to introduce the Gaussian random walk, a discrete time continuous space Markov process. Earlier we defined a simple random walk as \[ X_n = X_0 + \sum^n_{i=1}Z_i, \hspace{4mm} \text{where} \hspace{4mm} Z_i = \begin{cases}
+    1  &\text{with probability} \hspace{2mm}p,\\
+    -1  &\text{with probability}\hspace{2mm} q.
+\end{cases}\].
+The Gaussian random walk follows a similar process however instead of using the step distribution $Z_i$ with $\pm 1$ for probabilities $p$ and $q$, it uses independently distributed $\epsilon_i \sim N(0, \sigma ^2)$. which looks like \[ X_n = X_0 + \sum^n_{i=1}\epsilon_i, \hspace{4mm} \text{where} \hspace{4mm} \epsilon_i\sim N(0, \sigma ^2). \]
+
+Comparing the definitions of Brownian motion and Gaussian random walks, they both use the same incremental structure with independent and stationary Gaussian increments. They only differ in their time space with Gaussian random walks defined in discrete time $n \in \{0,1,2,\dots \}$ with fixed variance $\sigma ^2$ and Brownian motion defined in continuous time with $t \geq 0$ and an increment variance $\sigma^2 \Delta t$ scaling with size of the time gap. Therefore discretizing Brownian motion onto a fixed time grid $\Delta t$ gives a Gaussian random walk with step variance $\sigma ^2 \Delta t$. This is the exact method we can use to simulate Brownian motion.
+
+More formally this relation comes from Donsker's invariance princple which states, let $\{X_1,X_2, X_3,\dots \}$ be i.i.d. random variables with $E[X_i] = 0$ and $Var[X_i] = 1$. Define the random walk after n steps, \[ S_n = X_1+X_2+\cdots + X_n.\] Normalise this walk by defining $B_n(t)$ for $t \geq 0$ as \[B_n(t) = \frac{S_{[nt]}}{\sqrt{n}}\] where $[nt]$ is the largest integer less than $nt$. Then taking the limit as $n \rightarrow \infty$ \[B(t) := \lim_{n \rightarrow \infty} B_n(t)\] is a standard Brownian motion process. Figure~(\ref{fig:Brownian motion delta t}) shows this visually and as $\Delta t$ decreases we see a clearer illustration of what Brownian motion looks like. When using Gaussian random walks at each point, there is no approximation error, they match the Brownian motion exactly, the only discrepancy is between the grid points but we know this vanishes as the grid is refined from Donsker's invariance princple, so when using Gaussian random walks to simulate Brownian motion the key take away is that its exact at the grid points but only an estimate between them.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures//Brownian_motion/bm vs grw.png}
+    \caption{Image showing change in increment size $\Delta t$ for the same Brownian motion}
+    \label{fig:Brownian motion delta t}
+\end{figure}
+
+
+We can model probability by using the conditional distribution $Y= B(t)$ given $X = B(s)$, \[ [Y \mid X=x] \sim N(x, \sigma ^2 (t-s)) \qquad\text{for} \quad t > s\] with a probability density function of \[p(y,t \mid x) = \frac{1}{\sqrt{2\pi \sigma ^2 (t-s)}} e^{-\frac{1}{2}\frac{(y-x)^2}{\sigma ^2 (t-s)}}.\]
+Also note that for any Brownian motion $B(t)$, $E[B(t)] = 0$ and $Var[B(t)] = \sigma^2 t$.
+
+\subsection{Simulating and Validating Properties}
+In the left plot of Figure~(\ref{fig:validating bmotion properties}) we observe a convergence for our estimates with an increase in sample paths $n$, importantly we also see that variance converges to straight line with gradient $\sigma^2 = 1$. We can see that for all time $t$ the expectation of $B(t)$ is $0$.
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}{.40\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Brownian_motion/variance and exp against time.png}
+    \end{minipage}
+    \begin{minipage}{.40\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Brownian_motion/probability density at different snapshots.png}
+    \end{minipage}
+    \caption{Figure showing empirical expectation, variance and probability density over time}
+    \label{fig:validating bmotion properties}
+\end{figure}
+
+The right side plot was obtained by computing the histogram of $100,000$ paths at different snapshots in time, with the dashed lines added corresponding with the theoretical PDF. We can see that for the earlier snapshot at time $t = 3.33$, that the spread is much smaller than the other $2$, following a normal distribution with mean of $0$ and standard deviation of $\sqrt{3.33}$. For $t=6.66$ and $t=9.99$, we can see a gradual increase spread, lets investigate this further by looking at how the theoretical PDF itself evolves over time. Figure~(\ref{fig:diffusion of probability}) shows a surface plot of density and spread $y$ against time $t$. Starting from time $t = 2$ we see the probability densely concentrated but as $t$ increases we see a bigger spread and the concentrated probability diffuses outwards. The width of the bump at time $t$ scales like standard deviation $\sigma \sqrt{t}$ so the spreading actually decreases over time. This structure happens for a reason, which will be explained now.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures//Brownian_motion/diffusion of probability density.png}
+    \caption{Figure showing diffusion of probability over time}
+    \label{fig:diffusion of probability}
+\end{figure}
+
+We established earlier $B(t) \sim N(0, \sigma^2 t)$ with PDF $p(y, t \mid x)$, now lets introduce the diffusion equation that the PDF satisfies: \[ \frac{\partial p}{\partial t} = \frac{1}{2} \sigma^2 \frac{\partial ^2 p}{\partial t^2}.\]
+At the peak $y= 0$ the shape of the curve is locally concave so $\frac{\partial^2 p}{\partial t^2} < 0$ and therefore $\frac{\partial p}{\partial t} < 0$, so the peak is falling which is exactly what we see in the plot. Similarly at the tails which are convex we have $\frac{\partial^2 p}{\partial t^2} > 0$ so $\frac{\partial p}{\partial t} > 0$, telling us that the ends are rising.
+
+It is worth noting that the diffusion equation isn't really necessary for standard Brownian motion as solving the PDE would give us the same PDF as defining Brownian motion by gaussian increments. The diffusion equation is mostly useful for its generality as later it could be used for solving more complex equations.
+
+\subsection{Hitting Times and Gamblers Ruin in Continuous Time and State}
 
 \end{document}
 
