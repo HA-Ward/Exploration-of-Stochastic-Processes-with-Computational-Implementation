@@ -35,7 +35,7 @@ Applications to Financial Risk}   % edit accordingly
 
 \section{Random Walks}
 \subsection{Mathematical Definition}
-A random walk is simply a path created by a series of random steps. We would define a  1 dimensional random walk process to go up by $1$ with a probability of $p$ and down by $1$ with a probability of $q$. This can be written formally as, \[ X_{n+1} = \begin{cases} X_n+1 &\text{with probability} \hspace{2mm}p,\\X_n-1 &\text{with probability} \hspace{2mm}q.\end{cases}
+A random walk is a stochastic process constructed from a sequence of random increments. We would define a one-dimensional simple random walk process to go up by $1$ with a probability of $p$ and down by $1$ with a probability of $q$. This can be written formally as, \[ X_{n+1} = \begin{cases} X_n+1 &\text{with probability} \hspace{2mm}p,\\X_n-1 &\text{with probability} \hspace{2mm}q.\end{cases}
 \]
 Or alternatively, \[ X_n = X_0 + \sum^n_{i=1}Z_i, \hspace{4mm} \text{where} \hspace{4mm} Z_i = \begin{cases}
     1  &\text{with probability} \hspace{2mm}p,\\
@@ -64,18 +64,18 @@ Var[X_n] &= nVar[Z_1] = 4npq.
 \end{align*}
 
 \subsection{Computational Implementation}
-The random walks were simulated by generating independent Bernoulli trials at each step, with a probability $p$ of going up by 1 and $1-p$ going down by 1. The results from these Bernoulli trials were cumulatively summed to create the path. The simulation can be repeated for a lage number of independent paths allowing for us to estimate quantities for expectation and variance and see how they compare with the theoretical results.
+The random walks were simulated by generating independent Bernoulli trials at each step, with a probability $p$ of going up by 1 and $1-p$ going down by 1. The results from these Bernoulli trials were cumulatively summed to create the path. The simulation can be repeated for a large number of independent paths allowing for us to estimate quantities for expectation and variance and see how they compare with the theoretical results.
 
 \subsection{Numerical Experiments}
-Figure~(\ref{fig:simple symetric}) gives a visual realization to a random walk with probability $p=0.5$ over 300 steps. Although each increment is restricted to $\pm1$ we observe a lot of variation over time. 
+Figure~(\ref{fig:simple symmetric}) gives a visual realization to a random walk with probability $p=0.5$ over 300 steps. Although each increment is restricted to $\pm1$, we observe a lot of variation over time. 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/Random Walk/Simple Random Symetric Walk.png}
     \caption{Figure showing a singular simple random symmetric walk}
-    \label{fig:simple symetric}
+    \label{fig:simple symmetric}
 \end{figure}
 
-We next investigate many simulations with probability $p =0.6$ over 300 steps, to test the empirical values for expectation and variance and observe the distribution of final positions produced by simulating multiple many paths.
+We next investigate many simulations with probability $p =0.6$ over 300 steps, to test the empirical values for expectation and variance and observe the distribution of final positions produced by simulating many paths.
 
 From the histograms in Figure~(\ref{fig:walk many sims}) we can see that as $n$ increases the distribution of final positions approaches a normal distribution.
 Table~(\ref{tab:walk simulations}) shows the means and variances of each simulation size $n$.
@@ -97,7 +97,7 @@ Using the equations for variance and expectation we obtain theoretical values: \
     E[X_{300}] &= 0+ 300\times(0.6-0.4)=60\\
     Var[X_{300}] &= 4\times 300 \times 0.6 \times 0.4 = 288
 \end{align*}
-We can see that as $n$ increases the estimated values for expectation and variance become more accurate, interestingly our estimations for expectation were all pretty close to the theoretical value even with small $n$ whilst the estimated variance was a lot less accurate. This is because the mean is estimated by averaging outcomes directly whereas variance is estimated by averaging the squared deviation from the mean. Squaring amplifies the influence of any walk that travels far from the mean and explains why for our $n=20$ simulation the estimated variance is much larger than the theoretical since it contained a relatively extreme final positions.
+We can see that as $n$ increases the estimated values for expectation and variance become more accurate, interestingly our estimations for expectation were all pretty close to the theoretical value even with small $n$ whilst the estimated variance was a lot less accurate. This is because the mean is estimated by averaging outcomes directly whereas variance is estimated by averaging the squared deviation from the mean. Squaring amplifies the influence of any walk that travels far from the mean and explains why for our $n=20$ simulation the estimated variance is much larger than the theoretical since it contained a relatively extreme final position.
 
 \begin{figure}
         \begin{minipage}{.5\textwidth}
@@ -115,22 +115,22 @@ We can see that as $n$ increases the estimated values for expectation and varian
     \end{figure}
 
 \newpage
-\section{Gamblers Ruin}
+\section{Gambler's Ruin}
 \subsection{Problem Formulation}
-Player A is playing against Player B, Player A starts with £$a$ and Player B starts with £$b$ where $m = a+b$ is the total amount of money. At each step in the game each player bets £$1$ where Player A wins £$1$ with probability $p$ and loses with probability $q$. There game continues until either player goes bankrupt. We can represent this a stochastic process \[X_{n+1} = \begin{cases}
-    X_n + 1 &\text{with probabilty }p \text{ if } 1\leq X_n \leq m-1,\\
+Player A is playing against Player B, Player A starts with £$a$ and Player B starts with £$b$ where $m = a+b$ is the total amount of money. At each step in the game each player bets £$1$ where Player A wins £$1$ with probability $p$ and loses with probability $q$. The game continues until either player goes bankrupt. We can represent this as a stochastic process \[X_{n+1} = \begin{cases}
+    X_n + 1 &\text{with probability }p \text{ if } 1\leq X_n \leq m-1,\\
     X_n -1 &\text{with probability }q \text{ if } 1\leq X_n \leq m-1,\\
     0 &\text{if }X_n = 0,\\
     m &\text{if }X_n = m.
 \end{cases}\] This is the same as a random walk but with absorbing barriers at $X_n=0$ and $X_n = m$.
 \subsection{Analytical Solution}
-First lets solve for the probability of ruin, that is the probability of player A going bankrupt. We can write 
+First let's solve for the probability of ruin, that is the probability of player A going bankrupt. We can write 
 \begin{align*}
 \mathbb{P}(\text{Ruin}) &= \mathbb{P}(\text{win first round})\mathbb{P}(\text{Ruin} \mid \text{win first round}) + \mathbb{P}(\text{lose first round})\mathbb{P}(\text{Ruin} \mid \text{lose first round})\\
 &=p\mathbb{P}(\text{Ruin} \mid \text{win first round}) + q\mathbb{P}(\text{Ruin} \mid \text{lose first round})
 \end{align*}
 \noindent
-From the property of Markov processes we know that $\mathbb{P}(\text{Ruin} \mid \text{lose first round})$ and $\mathbb{P}(\text{Ruin} \mid \text{win first round})$ are the same as $\mathbb{P}(\text{Ruin})$ just with $\pm1$ starting points, allowing us to write probability or ruin as \[r_i = pr_{i+1} + qr_{i-1}.\]
+From the property of Markov processes we know that $\mathbb{P}(\text{Ruin} \mid \text{lose first round})$ and $\mathbb{P}(\text{Ruin} \mid \text{win first round})$ are the same as $\mathbb{P}(\text{Ruin})$ just with $\pm1$ starting points, allowing us to write probability of ruin as \[r_i = pr_{i+1} + qr_{i-1}.\]
 giving the linear difference, \[pr_{i+1}-r_i+qr_{i-1}=0 \qquad \text{subject to} \qquad r_0=1,\, r_m=0. \]
 \noindent
 by solving the difference equation with $a$ as the start point and $\rho = q/p$, the solution for the probability of ruin is \[ r_a = \begin{cases}
@@ -138,7 +138,7 @@ by solving the difference equation with $a$ as the start point and $\rho = q/p$,
     1-\frac{a}{m} &\text{if }\rho = 1.
 \end{cases}\]
 
-similarly we can solve for expected duration of game, \begin{align*}
+similarly, we can solve for expected duration of game, \begin{align*}
     E[\text{duration}] &= \mathbb{P}(\text{win first round})E[\text{duration} \mid \text{win first round}] + \mathbb{P}(\text{lose first round})E[\text{duration} \mid \text{lose first round}]\\
     &= pE[\text{duration} \mid \text{win first round}] + qE[\text{duration} \mid \text{lose first round}]\\
     d_i &= p(1+d_{i+1}) + q(1+d_{i-1})
@@ -172,7 +172,7 @@ Figure~(\ref{fig:Gamblers ruin}) shows random walks simulated with probability $
 
 Without calculating the probability of ruin we can clearly see that the probability should be $0.50$, and from this figure we can see that as n increases the ratio of paths that are ruined become closer to the theoretical probability.
 
-We will investigate this further by looking at how this ratio of ruin converges as n increases, however using $m = 50$ and $p=0.51$ and keeping $a=20$. This time the theoretical probability isn't obvious so we will have we will have to solve the probability of ruin using the equation stated in the last section. with $\rho = 49/51$ we have \[r_{20} =\frac{\frac{49}{51}^{20} - \frac{49}{51}^{50}}{1-\frac{49}{51}^{50}} = 0.3631.\]
+We will investigate this further by looking at how this ratio of ruin converges as n increases, however using $m = 50$ and $p=0.51$ and keeping $a=20$. This time the theoretical probability isn't obvious so we will have to solve the probability of ruin using the equation stated in the last section. With $\rho = 49/51$ we have \[r_{20} =\frac{\frac{49}{51}^{20} - \frac{49}{51}^{50}}{1-\frac{49}{51}^{50}} = 0.3631.\]
 
 \begin{figure}[h]
     \begin{minipage}{.5\textwidth}
@@ -185,14 +185,14 @@ We will investigate this further by looking at how this ratio of ruin converges 
     \label{fig:sim error}
 \end{figure}
 
-Figure~(\ref{fig:sim error}) includes 2 plots, the plot on the left shows how the ratio of paths that become ruined change with increase n and the figure on the right shows absolute error. At first this result might not be what you expected as after the first few thousand number of paths we don't really observe a convergence, instead it seems to look like a white noise process.
+Figure~(\ref{fig:sim error}) includes 2 plots, the plot on the left shows how the ratio of paths that become ruined change with an increase in $n$ and the figure on the right shows absolute error. At first this result might not be what you expected as after the first few thousand of paths we don't really observe a convergence, instead it seems to look like a white noise process.
 
-This can be explained since we can treat each path as an independent Bernoulli trial (ruined, not ruined), with variance $p(1-p)$. Since our simulated ratio $\hat{p}$ is the average of $n$ trials its variance is $p(1-p)/n$ and therefore the standard error is $SE[\hat{p}] = \sqrt{p(1-p)/n}$. The standard error is proportional to $1/\sqrt{n}$ this is why from $n =2000$ to $n = 10000$ a $\times5$ increase in $n$ we only observe a $1/\sqrt{5} \approx2.2$ shrinkage in error.
+This can be explained since we can treat each path as an independent Bernoulli trial (ruined, not ruined), with variance $p(1-p)$. Since our simulated ratio $\hat{p}$ is the average of $n$ trials its variance is $p(1-p)/n$ and therefore the standard error is $SE[\hat{p}] = \sqrt{p(1-p)/n}$. The standard error is proportional to $1/\sqrt{n}$ this is why from $n =2000$ to $n = 10000$ a factor of $5$ increase in $n$ we only observe a factor of $1/\sqrt{5} \approx0.45$ reduction in error.
 
-On the figure in the right I included a plot of standard error since it gives the theoretical scale of which the error should fluctuate around.
+On the figure in the right I included a plot of standard error since it gives the theoretical scale around which the error should fluctuate.
 
 \subsection{Theory vs Simulation}
-We have looked at how probability of ruin can be calculated and simulated, lets next investigate solving duration. Using the same variables $m=50$, $p=0.51$ and $a=20$ as last time we can calculate the expected duration \[d_{20} = \frac{1}{0.49-0.51}(20-50\times\frac{1-\frac{49}{51}^{20}}{1-\frac{49}{51}^{50}})=592.2.\]
+We have looked at how probability of ruin can be calculated and simulated, let's next investigate solving duration. Using the same variables $m=50$, $p=0.51$ and $a=20$ as last time we can calculate the expected duration \[d_{20} = \frac{1}{0.49-0.51}(20-50\times\frac{1-\frac{49}{51}^{20}}{1-\frac{49}{51}^{50}})=592.2.\]
 
 Now we can calculate the mean duration from simulating $100,000$ paths, Figure~(\ref{fig:hist gruin}) shows the mean duration and compares it with the theoretical expected duration. More importantly it shows the shape of its distribution.
 
@@ -208,11 +208,11 @@ Whilst having the equation to work out theoretical expected duration is handy es
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{figures//Gamblers_ruin/sim dist vs pmf.png}
-    \caption{Simulated distribution vs probabilty mass function}
+    \caption{Simulated distribution vs probability mass function}
     \label{fig:sim vs exact}
 \end{figure}
 
-The simulated paths appear to reinforce our method for calculating the exact PMF, this result is quite important as we can now find exact probabilities using this distribution instead of using just expected duration or probabilities from the simulated distribution. For example lets say we want to find the number of steps it would take for us to be $95\%$ confident that the game has finished we can use a search in python to find that it would take $1521$.
+The simulated paths appear to reinforce our method for calculating the exact PMF, this result is quite important as we can now find exact probabilities using this distribution instead of using just expected duration or probabilities from the simulated distribution. For example let's say we want to find the number of steps it would take for us to be $95\%$ confident that the game has finished we can use a search in python to find that it would take $1521$.
 
 \noindent
 Experimenting with values for $a$, $m$ and $p$ I was able create the PMF in Figure~(\ref{fig:pmf a = 10, m = 150}). This process is quite interesting as there is a relatively high probability of the game finishing early on as the start position of $10$ is very close to $0$, however because of the probability $p=0.525$ there is a drift that means the theoretical probability of ruin is only $0.448$. 
@@ -262,8 +262,8 @@ The Gambler's Ruin problem demonstrated how analytical solutions for both absorp
 \section{Markov Chains}
 
 \subsection{Transition Probabilities and Matrices}
-A markov chain is a series of random variables $X_0, X_1,X_2,...$ taking values from a state space $S$ whilst satisfying the markov property. Which is formally written \[\mathbb{P}(X_{n+1}=j \mid X_n=i,X_{n-1},...,X_0)=\mathbb{P}(X_{n+1}=j \mid X_n=i).\]
-Or in words, given the present state the future is independent of the past. Recall that we used this property in solving gamblers ruin, however we used it to condition the problem on its first step and then solving the difference equation. Whilst this method works cleanly for the gamblers ruin problem, using transition probabilities/matrices gives an explicit method that works with any transition structure or number of states.
+A Markov chain is a series of random variables $X_0, X_1,X_2,...$ taking values from a state space $S$ whilst satisfying the Markov property. Which is formally written \[\mathbb{P}(X_{n+1}=j \mid X_n=i,X_{n-1},...,X_0)=\mathbb{P}(X_{n+1}=j \mid X_n=i).\]
+Or in words, given the present state the future is independent of the past. Recall that we used this property in solving gambler's ruin, however we used it to condition the problem on its first step and then solving the difference equation. Whilst this method works cleanly for the gambler's ruin problem, using transition probabilities/matrices gives an explicit method that works with any transition structure or number of states.
 
 In the previous examples we also only considered a specific start point, but we could pick a start point according to some distribution $\lambda_i =\mathbb{P}(X_0=i)$. Now consider Figure~(\ref{fig:3 state td}) a 3-state Markov chain with state space $S=\{0,1,2\}$ and transition matrix \[P = \begin{pmatrix}
     p_{00}&p_{01}&p_{02}\\
@@ -282,12 +282,12 @@ In the previous examples we also only considered a specific start point, but we 
 \mathrm{0} \ar[rr, bend left = 15, "0.3"] \ar[dr, bend left = 15, "0.7"]& &\mathrm{1}\ar[ll, bend left = 15, "0.4"]\ar[dl, bend left = 15, "0.6"]\\
 &\mathrm{2}\ar[ul, bend left = 15, "0.5"]\ar[ur, bend left = 15, "0.5"]
 \end{tikzcd}
-\caption{3 state transition diagram}
+\caption{three state transition diagram}
 \label{fig:3 state td}
 \end{figure}
 \noindent
 To find the probability of landing on a state $j$ after $n$ steps we can write \[ p_{ij}(n) = \mathbb{P}(X_n=j \mid X_0 = i).\]
-Where $p_{ij}(n)$ is the $(i,j)th$ entry of the matrix $P^n$. So if we wanted to find the probability of being in state $1$, $3$ steps after starting in state $2$ we would only need to calculate the matrix $P^3$ which is a non-trivial process using computation. with \[P^3 = \begin{pmatrix}
+Where $p_{ij}(n)$ is the $(i,j)th$ entry of the matrix $P^n$. So if we wanted to find the probability of being in state $1$, three steps after starting in state $2$ we would only need to calculate the matrix $P^3$ which is a non-trivial process using computation. With \[P^3 = \begin{pmatrix}
     0.23 &0.231&0.539\\
  0.308&0.23 &0.462\\
  0.385&0.385&0.23 
@@ -305,7 +305,7 @@ we now have \[\lambda P^3 = \begin{pmatrix}
 So if we still wanted to know the probability of ending on $1$ whilst knowing only the start distribution, we get a probability of $0.2922$.
 
 \subsection{Computational Implementation and Convergence}
-By simulating paths that follow the transition diagram in Figure~(\ref{fig:3 state td}) we can check if the probability calculated by $\lambda P^n$ is accurate to the the ratio of final positions for each state after a certain number of steps. Figure~(\ref{fig:ratio of finalp 3state}) shows a plot for the ratio of paths with a final position of $0$, $1$ and $2$ after n = 20 steps.
+By simulating paths that follow the transition diagram in Figure~(\ref{fig:3 state td}) we can check if the probability calculated by $\lambda P^n$ is accurate to the ratio of final positions for each state after a certain number of steps. Figure~(\ref{fig:ratio of finalp 3state}) shows a plot for the ratio of paths with a final position of $0$, $1$ and $2$ after n = 20 steps.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\linewidth]{figures//markov chains/ratio against number of paths 3 state.png}
@@ -319,7 +319,7 @@ With a row vector of probabilities of \[\lambda P^{20}= \begin{pmatrix}
 \end{pmatrix}\]
 we can see that as the number of paths increases the ratio of paths in each respective state converges closer to the theoretical value given by the row vector.
 
-Now lets investigate how the theoretical probability of this 3 state markov chain behaves with an increasing number of steps. Figure~(\ref{fig:theoretical probability against number of steps}) shows us that the theoretical probability fluctuates for each state until around step 10 where each state seems to converge.
+Now let's investigate how the theoretical probability of this three state Markov chain behaves with an increasing number of steps. Figure~(\ref{fig:theoretical probability against number of steps}) shows us that the theoretical probability fluctuates for each state until around step 10 where each state seems to converge.
 
 \begin{figure}[h]
     \centering
@@ -328,10 +328,9 @@ Now lets investigate how the theoretical probability of this 3 state markov chai
     \label{fig:theoretical probability against number of steps}
 \end{figure}
 
-this happens because our markov chain has a stationary distribution, that is there exists a probability vector $\pi$ satisfying $\pi P = \pi$. The plot shows that no matter where we start the probability will always converge to $\pi$. 
-A chain only converges like this if it's both irreducible (no isolated pockets) and aperiodic (it doesn't cycle in a predictable pattern), together these are called being ergodic.
+this happens because our Markov chain is both irreducible (every state can be reached from every other state) and aperiodic (it doesn't cycle in a predictable pattern), which guarantees the existence of unique a stationary distribution $\pi$ satisfying $\pi P = \pi$ and that the state probabilities will converge to it from any initial distribution. The plot shows that no matter where we start the probability will always converge to $\pi$. 
 
-At $n = 20$ the distribution appears to have numerically converged using the row vector calculated earlier, lets verify that it approximately satisfies $\pi P = \pi$.
+At $n = 20$ the distribution appears to have numerically converged using the row vector calculated earlier, let's verify that it approximately satisfies $\pi P = \pi$.
 
 \begin{align*}
     \pi P &= \begin{pmatrix}
@@ -347,8 +346,8 @@ At $n = 20$ the distribution appears to have numerically converged using the row
 \end{pmatrix}\approx\pi
 \end{align*}
 
-\subsection{Gamblers Ruin as a Markov Chain}
-Lets revise the gamblers ruin problem using the same values $m =50$, $p=0.51$ and $a = 20$ but instead explicitly solving using Markov chains instead of using the formulas derived by solving difference equations. We can do this using a $51\times51$ transition matrix where for every $ith$ row entry $(i,i-1)=1-p$ and $(i,i+1) = p$ apart from row $0$ and $m$ which have entries $(0,0) = 1$ and $(m,m) = 1$ respectively. Which will look like this: \[P = \begin{pmatrix}
+\subsection{Gambler's Ruin as a Markov Chain}
+Let's revise the gambler's ruin problem using the same values $m =50$, $p=0.51$ and $a = 20$ but instead explicitly solving using Markov chains instead of using the formulas derived by solving difference equations. We can do this using a $51\times51$ transition matrix where for every $ith$ row entry $(i,i-1)=1-p$ and $(i,i+1) = p$ apart from row $0$ and $m$ which have entries $(0,0) = 1$ and $(m,m) = 1$ respectively. Which will look like this: \[P = \begin{pmatrix}
     1&0&0&\cdots&0&0&0\\
     0.49&0&0.51&\cdots&0&0&0\\
     0&0.49&0&\cdots&0&0&0\\
@@ -375,10 +374,10 @@ The right plot in Figure~(\ref{fig:cpruin and cdf duration}) was computed by com
 \newpage
 \section{Poisson processes}
 \subsection{Defining a Poisson Process}
-Previously we have been working on stochastic processes in discrete space $S = \mathbb{Z}$ and discrete time steps. Poisson processes still exist in a discrete space, however with continuous time. Picture a walk that can only move upwards but instead of just moving at each fixed step, their is a distribution deciding on when each step will be. This in fact is one of the ways we can define the Poisson process. More officially let $T_1,T_2,T_3,...$ be i.i.d. random variables of time between each step with $T_i \sim \text{Exponential}[\lambda]$ then \[ X(t) = \begin{cases}
+Previously we have been working on stochastic processes in discrete space $S = \mathbb{Z}$ and discrete time steps. Poisson processes still exist in a discrete space, however with continuous time. Picture a walk that can only move upwards but instead of just moving at each fixed step, there is a distribution deciding on when each step will be. This in fact is one of the ways we can define the Poisson process. More officially let $T_1,T_2,T_3,...$ be i.i.d. random variables of time between each step with $T_i \sim \text{Exponential}[\lambda]$ then \[ X(t) = \begin{cases}
     0 &\text{for }0\leq t \leq T_1, \\
      1 &\text{for }T_1\leq t \leq T_1 + T_2, \\
-      2 &\text{for }T_2\leq t \leq T_1 + T_2 +T_3, \\
+      2 &\text{for }T_1 + T_2\leq t \leq T_1 + T_2 +T_3, \\
       \text{and so on.}
 \end{cases}\]
 \noindent
@@ -397,7 +396,7 @@ We can also define a Poisson process using Poisson increments. That is a stochas
     \item $X(t_2) - X(t_1)$ and $X(t_4) - X(t_3)$ are independent for all $t_1 \leq t_2 \leq t_3 \leq t_4$
 \end{enumerate}
 
-This definition and the first definition are the exact, however using this definition we can easily work out the theoretical probability of a number of events happening in a given time. Whilst the first definition makes it easy to simulate a sample path whilst also being able to solve problems about waiting times.
+This definition and the first definition are equivalent, however using this definition we can easily work out the theoretical probability of a number of events happening in a given time. Whilst the first definition makes it easy to simulate a sample path whilst also being able to solve problems about waiting times.
 
 \subsection{Computational Verification}
 The left plot in Figure~(\ref{fig:act vs sim pmf}) was computed by generating $10,000$ paths of $\lambda = 0.5$ and max time of $10$ where each bar represents the percentage of paths that ended with the final count at that position. The plot on the right is the PMF for a Poisson distribution with $\lambda = 5$, notice that the plots are approximately the same this is due to the fact that $X(t) \sim Po(\lambda t)$. The expectation and variance of the final count was $4.975$ and  $4.896$ respectively and when we increase the number of paths to $100,000$ we get $5.012$ and $5.017$ converging closer to the theoretical value of $5$. 
@@ -413,7 +412,7 @@ The left plot in Figure~(\ref{fig:act vs sim pmf}) was computed by generating $1
     \label{fig:act vs sim pmf}
 \end{figure}
 
-Lets also test the superposition property of Poisson processes, this being that if $X(t)$ and $Y(t)$ are both independent Poisson processes with rates $\lambda$ and $\mu$ respectively then the process $Z(t)$ given by $Z(t)=X(t)+Y(t)$ is a Poisson process with rate $\lambda + \mu$. Lets pick $\lambda = 2$ and $\mu = 4$, we might expect that the that the mean and variance of generated values will converge to $6$. Figure~(\ref{fig:exp and var of realisations}) shows this result exactly.
+Let's also test the superposition property of Poisson processes, this being that if $X(t)$ and $Y(t)$ are both independent Poisson processes with rates $\lambda$ and $\mu$ respectively then the process $Z(t)$ given by $Z(t)=X(t)+Y(t)$ is a Poisson process with rate $\lambda + \mu$. Let's pick $\lambda = 2$ and $\mu = 4$, we might expect that the mean and variance of generated values will converge to $6$. Figure~(\ref{fig:exp and var of realisations}) shows this result exactly.
 
 \begin{figure}[h]
     \begin{minipage}{.5\textwidth}
@@ -441,6 +440,125 @@ However we can better confirm this by looking at the PMFs. Figure~(\ref{fig:pmf 
 \end{figure}
 
 \section{Brownian Motion}
+\subsection{Definitions and Properties}
+Continuing with continuous time let's introduce Brownian motion. Brownian motion is a continuous-time and continuous state-space Markov process. A stochastic process $B(t)$ is defined as Brownian motion if it satisfies:
+\begin{enumerate}
+    \item $B(0) = 0$ and $B(t)$ is a continuous function of $t$
+    \item independent increments: for any $0 < t_1 < t_2 < t_3 <  t_4$ the increments \[B(t_2) - B(t_1)\text{ and } B(t_4) - B(t_3)\] are independent random variables.
+    \item stationary Gaussian increments: for every time $t$ and time increment $\Delta t$, \[B(t+\Delta t) - B(t) \sim N(0, \sigma ^2 \Delta t)\] where $\sigma  > 0$ is the volatility parameter.
+\end{enumerate}
 
+At this stage it is also important to introduce the Gaussian random walk, a discrete time continuous space Markov process. Earlier we defined a simple random walk as \[ X_n = X_0 + \sum^n_{i=1}Z_i, \hspace{4mm} \text{where} \hspace{4mm} Z_i = \begin{cases}
+    1  &\text{with probability} \hspace{2mm}p,\\
+    -1  &\text{with probability}\hspace{2mm} q.
+\end{cases}\].
+The Gaussian random walk follows a similar process however instead of using the step distribution $Z_i$ with $\pm 1$ for probabilities $p$ and $q$, it uses independently distributed $\epsilon_i \sim N(0, \sigma ^2)$. Which looks like \[ X_n = X_0 + \sum^n_{i=1}\epsilon_i, \hspace{4mm} \text{where} \hspace{4mm} \epsilon_i\sim N(0, \sigma ^2). \]
+
+Comparing the definitions of Brownian motion and Gaussian random walks, they both use the same incremental structure with independent and stationary Gaussian increments. They only differ in their time and state space with Gaussian random walks defined in discrete time $n \in \{0,1,2,\dots \}$ with fixed variance $\sigma ^2$ and Brownian motion defined in continuous time with $t \geq 0$ and an increment variance $\sigma^2 \Delta t$ scaling with size of the time gap. Therefore discretizing Brownian motion onto a fixed time grid $\Delta t$ gives a Gaussian random walk with step variance $\sigma ^2 \Delta t$. This is the exact method we can use to simulate Brownian motion.
+
+More generally, even non-Gaussian i.i.d. steps converge to Brownian motion in the limit, this is the content of Donsker's invariance principle which states, let $\{X_1,X_2, X_3,\dots \}$ be i.i.d. random variables with $E[X_i] = 0$ and $Var[X_i] = 1$. Define the random walk after n steps, \[ S_n = X_1+X_2+\cdots + X_n.\] Normalise this walk by defining $B_n(t)$ for $t \geq 0$ as \[B_n(t) = \frac{S_{[nt]}}{\sqrt{n}}\] where $[nt]$ is the largest integer less than $nt$. Donsker's invariance principle states that $B_n$ converges in distribution to a standard Brownian motion as $n\rightarrow\infty$.
+
+Figure~(\ref{fig:Brownian motion delta t}) shows this visually and as $\Delta t$ decreases we see a clearer illustration of what Brownian motion looks like. When using Gaussian random walks at each point, there is no approximation error, they match the Brownian motion exactly, the only discrepancy is between the grid points but we know this vanishes as the grid is refined, so when using Gaussian random walks to simulate Brownian motion the key takeaway is that it's exact at the grid points but only an estimate between them.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures//Brownian_motion/bm vs grw.png}
+    \caption{Image showing change in increment size $\Delta t$ for the same Brownian motion}
+    \label{fig:Brownian motion delta t}
+\end{figure}
+
+
+We can model probability by using the conditional distribution $Y= B(t)$ given $X = B(s)$, \[ [Y \mid X=x] \sim N(x, \sigma ^2 (t-s)) \qquad\text{for} \quad t > s\] with a probability density function of \[p(y,t \mid x) = \frac{1}{\sqrt{2\pi \sigma ^2 (t-s)}} e^{-\frac{1}{2}\frac{(y-x)^2}{\sigma ^2 (t-s)}}.\]
+Also note that for any Brownian motion $B(t)$, $E[B(t)] = 0$ and $Var[B(t)] = \sigma^2 t$.
+
+\subsection{Simulating and Validating Properties}
+In the left plot of Figure~(\ref{fig:validating bmotion properties}) we observe a convergence for our estimates with an increase in sample paths $n$, importantly we also see that variance converges to a straight line with gradient $\sigma^2 = 1$. We can see that for all time $t$ the expectation of $B(t)$ is $0$.
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}{.40\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Brownian_motion/variance and exp against time.png}
+    \end{minipage}
+    \begin{minipage}{.40\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Brownian_motion/probability density at different snapshots.png}
+    \end{minipage}
+    \caption{Figure showing empirical expectation, variance and probability density over time}
+    \label{fig:validating bmotion properties}
+\end{figure}
+
+The right side plot was obtained by computing the histogram of $100,000$ paths at different snapshots in time, with the dashed lines added corresponding with the theoretical PDF. We can see that for the earlier snapshot at time $t = 3.33$, that the spread is much smaller than the other $2$, following a normal distribution with mean of $0$ and standard deviation of $\sqrt{3.33}$. For $t=6.66$ and $t=9.99$, we can see a gradual increase in spread, let's investigate this further by looking at how the theoretical PDF itself evolves over time. Figure~(\ref{fig:diffusion of probability}) shows a surface plot of density and spread $y$ against time $t$. Starting from time $t = 2$ we see the probability density is concentrated but as $t$ increases we see a bigger spread and the concentrated probability diffuses outwards. The width of the bump at time $t$ scales like standard deviation $\sigma \sqrt{t}$ so the spreading actually increases over time. This structure happens for a reason, which will be explained now.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures//Brownian_motion/diffusion of probability density.png}
+    \caption{Figure showing diffusion of probability over time}
+    \label{fig:diffusion of probability}
+\end{figure}
+
+We established earlier $B(t) \sim N(0, \sigma^2 t)$ with PDF $p(y, t \mid x)$, now let's introduce the diffusion equation that the PDF satisfies: \[ \frac{\partial p}{\partial t} = \frac{1}{2} \sigma^2 \frac{\partial ^2 p}{\partial y^2}.\]
+At the peak $y= 0$ the shape of the curve is locally concave so $\frac{\partial^2 p}{\partial y^2} < 0$ and therefore $\frac{\partial p}{\partial t} < 0$, so the peak is falling which is exactly what we see in the plot. Similarly at the tails which are convex we have $\frac{\partial^2 p}{\partial y^2} > 0$ so $\frac{\partial p}{\partial t} > 0$, telling us that the ends are rising.
+
+It is worth noting that the diffusion equation isn't really necessary for standard Brownian motion as solving the PDE would give us the same PDF as defining Brownian motion by gaussian increments. The diffusion equation is mostly useful for its generality as later it could be used for solving more complex equations.
+
+\subsection{Two Boundary Hitting Times for Brownian Motion}
+let's consider a Brownian motion with two boundaries with one at $0$ and the other at $m$, where we want to know the expected time before hitting a boundary and the probability of hitting each boundary. In essence this is a variation of Gambler's ruin problem however in continuous time and space state.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.45\linewidth]{figures/Brownian_motion/G_ruin_continuous.png}
+    \caption{Gambler's ruin in continuous time}
+    \label{fig:g_ruin_cont}
+\end{figure}
+
+\noindent{}Figure~(\ref{fig:g_ruin_cont}) shows a simulated realization of a Brownian motion in a gambler's ruin problem with start position $a = 20$ and barriers at $m= 40$ and $0$, the final time $T$ was estimated by linear interpolation of the path between the last position inside the barriers and first position outside them.
+
+Like before let's first derive formula for probability of ruin and expected duration, before this let's introduce martingales. 
+
+Martingales are essentially just stochastic processes where the expected future position is the position it is in currently, \[ E[X_{t+n} \mid X_0, \dots, X_t] = X_t.\]
+Brownian motion is also a martingale, since its increments have zero conditional expectation..
+
+We now consider Brownian motion started at $a$, so that $B_0=a$, and fix 2 boundaries at $0$ and $m$. Let's define the stopping time \[T = \text{inf} \{t \ge 0: B_t = 0 \text{ or } B_t = m\},\] the first time the
+Brownian motion hits either boundary. We want \[p(a) = \mathbb{P}(B_t = 0 \mid B_0 = a),\] the probability of hitting 0 before m. From the property of Martingales we know \[ E[B_T] = E[B_0] = a\] and using the fact that there can only be two outcomes $B_T = 0$ with probability $p(a)$ and $B_T = m$ with probability $1 - p(a)$ we can solve for $p(a)$,
+
+\begin{align*}
+    E[B_T] = 0 \times p(a) + m \times (1-p(a)) &= a \\
+     m(1-p(a)) &= a \\
+    p(a) = 1- \frac{a}{m} = \frac{m-a}{m}.
+\end{align*}
+To solve for expected duration we need to use a clever trick since $E[B_T]$ alone can't give us $E[T]$ since $B_t$ carries no information on time elapsed, so in order to solve $E[T]$ we need a martingale that explicitly involves t, in this case we will use the martingale $X_t = B^2_t -t$. To prove $X_t$ is in fact a martingale we need to make sure \[E[B_{t+n}^2 -(t+n) \mid B_0, \dots, B_t] = B_t^2 -t\] is satisfied. Let \[ B_{t+n} = B_t + \Delta, \quad \text{where} \quad \Delta = B_{t+n} - B_t \sim N(0,n) \text{ is independent of } B_0, \dots, B_t.\] Then, \[B_{t+n}^2 = B^2_t + 2B_t\Delta + \Delta^2 \] and by taking expectations with $E[\Delta] = 0$ and $E[\Delta^2] = n$ we get, \[E[B^2_{t+n} \mid B_0, \dots, B_t] = B^2_t + 2B_t \cdot E[\Delta] + E[\Delta^2] = B^2_t + n\] so, \[E[B_{t+n}^2 -(t+n) \mid B_0, \dots, B_t] = B_t^2 +n - (t + n) =B_t^2 -t.\] This confirms that $X_t = B_t^2 -t$ satisfies the martingale property. Therefore \begin{align*}
+    &E[X_T] = E[X_0] \\
+    &E[B^2_T-T] = E[B_0^2 - 0] = a^2 \\
+    &E[B^2_T] - E[T] = a^2.
+\end{align*}
+Using the ruin probability from before we can compute $E[B^2_T]$ as \[E[B^2_T] = 0^2 \times p(a) +m^2 \times (1-p(a)) = m^2 \times \frac{a}{m} = am\] and finally we can substitute into $E[B_T^2] - E[T] = a^2 $ to solve for $E[T]$ where we obtain \[E[T] = am-a^2 = a(m-a).\]
+
+From the formulas we have derived there is a linear relationship between probability of ruin and start position and a quadratic relation between expected duration and start position. Before verifying this computationally let's first investigate how the accuracy of these formulas changes with sample size.
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}{.4\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Brownian_motion/pruin_cont_convergence.png}
+    \end{minipage}
+    \begin{minipage}{.4\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Brownian_motion/exduration_cont_convergence.png}
+    \end{minipage}
+    \caption{Figure showing the convergence of simulated values}
+    \label{fig:cont_convergence}
+\end{figure}
+
+As seen in figure~(\ref{fig:cont_convergence}) the computationally simulated values become closer to the theoretical with increasing sample size $n$, they do so in a way similar to what we observed in the classical gambler's ruin investigation, that is we see a decrease in absolute error roughly proportional to $1/\sqrt{n}$. Fixing the boundary position $m=50$ and sample size $n=1000$, we can verify the relation of our formulas with start position by computing probability of ruin and expected duration with change in $a$. Figure~(\ref{fig:cont_start}) shows this relationship from the formula with a clear negative linear line for probability and a negative quadratic for start position.
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}{.4\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Brownian_motion/pruin_start.png}
+    \end{minipage}
+    \begin{minipage}{.4\textwidth}
+    \includegraphics[width=1\linewidth]{figures/Brownian_motion/exduration_start.png}
+    \end{minipage}
+    \caption{Figure showing the relation between Probability of Ruin / Expected Duration and start position}
+    \label{fig:cont_start}
+\end{figure}
+
+This analysis on gambler's ruin has only considered the case of a standard Brownian motion without any drift, this is what allows us to use the martingale property directly to solve for probability of ruin and expected value. Brownian motion with drift is an obvious next step, one that I would like to investigate as further work or an extension to this project. In order to solve this we would construct an exponential martingale of the form $e^{-\theta B_t}$ for some $\theta$ using Ito's formula.
 \end{document}
 
