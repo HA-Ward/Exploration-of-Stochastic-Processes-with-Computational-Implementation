@@ -1,5 +1,4 @@
 # Exploration of Stochastic Processes with Computational Implementation
-Overview
 
 This project explores a sequence of stochastic processes, comparing analytical results with Monte Carlo simulation in Python. Each section derives the theory, implements it computationally, and checks that the two agree.
 
