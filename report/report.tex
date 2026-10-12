@@ -225,16 +225,16 @@ Whilst having the equation to work out theoretical expected duration is handy es
 The simulated paths appear to reinforce our method for calculating the exact PMF. This result is important as we can now find exact probabilities using this distribution rather than relying only on the expected duration or probabilities from the simulated distribution. For example, we can find the number of steps by which there is a $95\%$ probability that the game has finished. Using a search in Python, we find that this occurs at $1521$ steps.
 
 \noindent
-Experimenting with values for $a$, $m$ and $p$ I was able create the PMF in Figure~(\ref{fig:pmf a = 10, m = 150}). This process is quite interesting as there is a relatively high probability of the game finishing early on as the start position of $10$ is very close to $0$, however because of the probability $p=0.525$ there is a drift that means the theoretical probability of ruin is only $0.448$. 
+Experimenting with values for $a$, $m$ and $p$ I was able create the PMF in Figure~(\ref{fig:pmf a = 2, m = 250}). This process is quite interesting as there is a relatively high probability of the game finishing early on as the start position of $2$ is very close to $0$, however because of the probability $p=0.565$ there is a drift that keeps the probability of ruin at $0.5928$ instead of close to $1$. 
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures//Gamblers_ruin/pmf a = 10 m = 150.png}
+    \includegraphics[width=1\linewidth]{figures/Gamblers_ruin/pmf a=2 m=250.png}
     \caption{PMF showing the flaw in solely using expected duration}
-    \label{fig:pmf a = 10, m = 150}
+    \label{fig:pmf a = 2, m = 250}
 \end{figure}
 
-The main flaw I wanted to point out was that the expected duration alone provides an incomplete description of the distribution. In this example, the mean duration lies in a relatively low-probability region and although the average total steps would certainly match the expected duration there is only a $3\%$ chance a game would finish in the range $[500,1000]$ whilst there is a $33\%$ chance finishing before and $64\%$ chance finishing after. This demonstrates that the expected value does not necessarily correspond to a typical outcome, particularly for asymmetric distributions.
+The main flaw I wanted to point out was that the expected duration alone provides an incomplete description of the distribution. In this example, the mean duration lies in a relatively low-probability region and although the average total steps would certainly match the expected duration there is only a $0.01\%$ chance a game would finish in the range $[500,1000]$ whilst there is a $59.3\%$ chance finishing before and $40.7\%$ chance finishing after. This demonstrates that the expected value does not necessarily correspond to a typical outcome, particularly for asymmetric distributions.
 
 \subsection{How Probability of Ruin Changes With Start Position $a$ and Probability $p$}
 From the last few simulations or just thinking logically it follows intuitively that the closer the starting position $a$ is to $0$ and the smaller the value of $p$ the higher the probability of ruin. Figure~(\ref{fig:p ruin against p and a}) shows that the computed ratios fit the probability of ruin for both change in start position and probability. The left plot shows a decrease in probability with increase in start position with a curved increasing gradient. From the equation for probability of ruin we can see that the equation of this curve is \[r_a=1.156\times\frac{49}{51}^a-0.156.\]
